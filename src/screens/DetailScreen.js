@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { FavoriteContext } from '../context/FavoriteContext';
 
 const DetailScreen = ({ route }) => {
   const { bookId } = route.params;
   const [bookData, setBookData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { favorites, toggleFavorite } = useContext(FavoriteContext);
+  const isFavorite = favorites.some((fav) => fav.key === bookId);
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -47,6 +51,14 @@ const DetailScreen = ({ route }) => {
   const description = bookData.description?.value || bookData.description || 'Belum ada sinopsis untuk buku ini.';
   const coverUrl = bookData.covers?.[0] ? `https://covers.openlibrary.org/b/id/${bookData.covers[0]}-L.jpg` : null;
 
+  const handleToggleFavorite = () => {
+    toggleFavorite({
+      key: bookId,
+      title: bookData.title,
+      coverUrl: coverUrl
+    });
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.coverWrapper}>
@@ -61,8 +73,16 @@ const DetailScreen = ({ route }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{bookData.title}</Text>
-        <Text style={styles.publishDate}>Tahun Terbit: {bookData.first_publish_date || 'Tidak diketahui'}</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{bookData.title}</Text>
+            <Text style={styles.publishDate}>Tahun Terbit: {bookData.first_publish_date || 'Tidak diketahui'}</Text>
+          </View>
+          <TouchableOpacity onPress={handleToggleFavorite}>
+            <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={32} color={isFavorite ? "#e74c3c" : "#bdc3c7"} />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.separator} />
         <Text style={styles.sectionTitle}>Sinopsis</Text>
         <Text style={styles.descriptionText}>{description}</Text>
@@ -85,6 +105,8 @@ const styles = StyleSheet.create({
     padding: 24, minHeight: 500, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, 
     shadowOpacity: 0.05, shadowRadius: 8, elevation: 4 
   },
+  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  titleContainer: { flex: 1, paddingRight: 15 },
   title: { fontSize: 22, fontWeight: 'bold', color: '#2c3e50', marginBottom: 6, lineHeight: 30 },
   publishDate: { fontSize: 14, color: '#7f8c8d', fontWeight: '500' },
   separator: { height: 1, backgroundColor: '#ecf0f1', marginVertical: 20 },

@@ -8,9 +8,7 @@ export const FavoriteProvider = ({ children }) => {
   const toggleFavorite = (book) => {
     setFavorites((prev) => {
       const isExist = prev.find((item) => item.key === book.key);
-      if (isExist) {
-        return prev.filter((item) => item.key !== book.key); 
-      }
+      if (isExist) return prev.filter((item) => item.key !== book.key); 
       return [...prev, book]; 
     });
   };

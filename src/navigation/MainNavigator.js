@@ -12,24 +12,7 @@ import AboutScreen from '../screens/AboutScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function HomeStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
-      <Stack.Screen 
-        name="BookList" 
-        component={HomeScreen} 
-        options={{ title: 'Katalog Buku', headerShadowVisible: false }} 
-      />
-      <Stack.Screen 
-        name="Detail" 
-        component={DetailScreen} 
-        options={{ title: 'Detail Buku', headerShadowVisible: false }} 
-      />
-    </Stack.Navigator>
-  );
-}
-
-export default function MainNavigator() {
+function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,13 +25,26 @@ export default function MainNavigator() {
         tabBarActiveTintColor: '#2e86de',
         tabBarInactiveTintColor: '#a4b0be',
         tabBarStyle: { borderTopWidth: 0, elevation: 10, shadowOpacity: 0.1 },
-        headerShown: false 
       })}
     >
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: true }} />
-      <Tab.Screen name="Favorit" component={FavoriteScreen} options={{ headerShown: true }} />
-      <Tab.Screen name="About" component={AboutScreen} options={{ headerShown: true }} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Katalog Buku' }} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Favorit" component={FavoriteScreen} />
+      <Tab.Screen name="About" component={AboutScreen} />
     </Tab.Navigator>
+  );
+}
+
+export default function MainNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
+      <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
+      
+      <Stack.Screen 
+        name="Detail" 
+        component={DetailScreen} 
+        options={{ title: 'Detail Buku', headerShadowVisible: false }} 
+      />
+    </Stack.Navigator>
   );
 }
