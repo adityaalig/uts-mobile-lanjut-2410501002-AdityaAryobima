@@ -1,36 +1,65 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 const AboutScreen = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.avatarPlaceholder}>
-        <Text style={{ color: '#fff' }}>Foto</Text>
+      <View style={styles.profileCard}>
+        <View style={styles.avatarContainer}>
+          <Text style={styles.avatarText}>Foto</Text>
+        </View>
+        
+        <Text style={styles.name}>Aditya Aryobima</Text>
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>NIM: 2410501002</Text>
+        </View>
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>Kelas: B</Text>
+        </View>
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>Tema: BookShelf</Text>
+        </View>
       </View>
-      
-      <Text style={styles.name}>Aditya Aryobima</Text>
-      <Text style={styles.info}>NIM: 2410501002</Text>
-      <Text style={styles.info}>Kelas: B</Text>
-      <Text style={styles.info}>Tema: BookShelf</Text>
-      
-      <View style={styles.footer}>
-        <Text style={styles.credit}></Text>
+
+      <View style={styles.footerContainer}>
+        <Text style={styles.creditLabel}>API Source: </Text>
+        <Text style={styles.creditLink}>openlibrary.org</Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', paddingTop: 50, backgroundColor: '#fff' },
-  avatarPlaceholder: { 
-    width: 100, height: 100, borderRadius: 50, 
-    backgroundColor: '#2e86de', justifyContent: 'center', alignItems: 'center',
-    marginBottom: 20
+  container: { flex: 1, backgroundColor: '#f4f6f8', padding: 20, alignItems: 'center' },
+  profileCard: { 
+    backgroundColor: '#fff', width: '100%', padding: 30, borderRadius: 24, 
+    alignItems: 'center', marginTop: 20, shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.05, shadowRadius: 20, elevation: 5 
   },
-  name: { fontSize: 22, fontWeight: 'bold', color: '#333' },
-  info: { fontSize: 16, color: '#666', marginTop: 5 },
-  footer: { marginTop: 'auto', marginBottom: 30 },
-  credit: { fontStyle: 'italic', color: '#999' }
+  avatarContainer: { 
+    width: 100, height: 100, borderRadius: 50, backgroundColor: '#2e86de', 
+    justifyContent: 'center', alignItems: 'center', marginBottom: 20, 
+    shadowColor: '#2e86de', shadowOffset: { width: 0, height: 5 }, 
+    shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 
+  },
+  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  name: { fontSize: 24, fontWeight: 'bold', color: '#2c3e50', marginBottom: 25 },
+  infoRow: { 
+    backgroundColor: '#f8f9fa', width: '100%', padding: 15, borderRadius: 12, 
+    marginBottom: 12, alignItems: 'center', justifyContent: 'center' 
+  },
+  infoText: { fontSize: 16, color: '#34495e', fontWeight: '500' },
+  footerContainer: {
+    marginTop: 'auto',
+    marginBottom: 20,
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  creditLabel: { fontSize: 14 },
+  creditLink: { fontSize: 14 }
 });
 
-export default AboutScreen; 
+export default AboutScreen;
