@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Keyboard } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Keyboard, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const SearchScreen = ({ navigation }) => {
@@ -9,8 +9,16 @@ const SearchScreen = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const handleSearch = async () => {
-    if (!query.trim()) {
+    const keyword = query.trim();
+
+    if (!keyword) {
       setErrorMsg('Kata kunci pencarian tidak boleh kosong.');
+      setResults([]);
+      return;
+    }
+    
+    if (keyword.length < 3) {
+      setErrorMsg('Kata kunci pencarian minimal 3 karakter.');
       setResults([]);
       return;
     }
@@ -20,13 +28,13 @@ const SearchScreen = ({ navigation }) => {
     setErrorMsg(null);
 
     try {
-      const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(query)}&limit=15`);
+      const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(keyword)}&limit=15`);
       if (!response.ok) throw new Error('Jaringan bermasalah');
       
       const data = await response.json();
       
       if (data.docs.length === 0) {
-        setErrorMsg('Buku yang kamu cari tidak ditemukan.');
+        setErrorMsg('buku yang kamu cari tidak ditemukan.');
         setResults([]);
       } else {
         setResults(data.docs);
@@ -72,25 +80,36 @@ const SearchScreen = ({ navigation }) => {
       </View>
 
       {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
-      {isLoading && <ActivityIndicator size="large" color="#2e86de" style={styles.loader} />}
+      {isLoading && <ActivityIndicator size="large" color="#967259" style={styles.loader} />}
 
       <FlatList
         data={results}
         keyExtractor={(item, index) => item.key || index.toString()}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <TouchableOpacity 
-            style={styles.card}
-            onPress={() => navigation.navigate('Detail', { bookId: item.key })}
-          >
-            <View style={styles.cardContent}>
-              <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text>
-              <Text style={styles.bookAuthor}>{item.author_name?.[0] || 'Penulis Tidak Diketahui'}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+          const coverId = item.cover_i;
+          const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : null;
+
+          return (
+            <TouchableOpacity 
+              style={styles.card}
+              onPress={() => navigation.navigate('Detail', { bookId: item.key })}
+            >
+              {coverUrl ? (
+                <Image source={{ uri: coverUrl }} style={styles.coverImage} />
+              ) : (
+                <View style={styles.placeholderCover}>
+                  <Ionicons name="book" size={24} color="#bdc3c7" />
+                </View>
+              )}
+              <View style={styles.cardContent}>
+                <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+            </TouchableOpacity>
+          );
+        }}
       />
     </View>
   );
@@ -102,15 +121,16 @@ const styles = StyleSheet.create({
   inputContainer: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f2f6', borderRadius: 12, paddingHorizontal: 15, height: 45, marginRight: 10 },
   searchIcon: { marginRight: 8 },
   input: { flex: 1, fontSize: 15, color: '#2c3e50' },
-  searchBtn: { backgroundColor: '#2e86de', justifyContent: 'center', paddingHorizontal: 20, borderRadius: 12, height: 45 },
+  searchBtn: { backgroundColor: '#967259', justifyContent: 'center', paddingHorizontal: 20, borderRadius: 12, height: 45 },
   searchBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
   errorText: { color: '#e74c3c', textAlign: 'center', marginTop: 20, marginHorizontal: 20 },
   loader: { marginTop: 30 },
   listContainer: { padding: 20, paddingBottom: 30 },
-  card: { backgroundColor: '#ffffff', padding: 20, marginBottom: 15, borderRadius: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 3 },
-  cardContent: { flex: 1, paddingRight: 10 },
-  bookTitle: { fontSize: 16, fontWeight: '700', color: '#2c3e50', marginBottom: 4 },
-  bookAuthor: { fontSize: 13, color: '#7f8c8d' }
+  card: { backgroundColor: '#ffffff', padding: 15, marginBottom: 15, borderRadius: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 3 },
+  coverImage: { width: 50, height: 75, borderRadius: 8, backgroundColor: '#e0e6ed', marginRight: 15 },
+  placeholderCover: { width: 50, height: 75, borderRadius: 8, backgroundColor: '#f1f2f6', justifyContent: 'center', alignItems: 'center', marginRight: 15 },
+  cardContent: { flex: 1, paddingRight: 10, justifyContent: 'center' },
+  bookTitle: { fontSize: 16, fontWeight: '700', color: '#2c3e50', marginBottom: 4 }
 });
 
 export default SearchScreen;

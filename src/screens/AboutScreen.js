@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native'; 
 
 const AboutScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileCard}>
+        
         <View style={styles.avatarContainer}>
-          <Text style={styles.avatarText}>Foto</Text>
+          <Image 
+            source={require('../../assets/foto_profil.png')} 
+            style={styles.avatarImage} 
+          />
         </View>
         
         <Text style={styles.name}>Aditya Aryobima</Text>
@@ -40,12 +44,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.05, shadowRadius: 20, elevation: 5 
   },
   avatarContainer: { 
-    width: 100, height: 100, borderRadius: 50, backgroundColor: '#2e86de', 
+    width: 100, height: 100, borderRadius: 50, backgroundColor: '#967259', 
     justifyContent: 'center', alignItems: 'center', marginBottom: 20, 
-    shadowColor: '#2e86de', shadowOffset: { width: 0, height: 5 }, 
-    shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 
+    shadowColor: '#967259', shadowOffset: { width: 0, height: 5 }, 
+    shadowOpacity: 0.3, shadowRadius: 10, elevation: 8,
+    overflow: 'hidden' 
   },
-  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  avatarImage: { width: '100%', height: '100%', resizeMode: 'cover' },
+  
   name: { fontSize: 24, fontWeight: 'bold', color: '#2c3e50', marginBottom: 25 },
   infoRow: { 
     backgroundColor: '#f8f9fa', width: '100%', padding: 15, borderRadius: 12, 

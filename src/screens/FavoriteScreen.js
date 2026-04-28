@@ -4,13 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { FavoriteContext } from '../context/FavoriteContext';
 
 const FavoriteScreen = ({ navigation }) => {
-  const { favorites } = useContext(FavoriteContext);
+  const { favorites, toggleFavorite } = useContext(FavoriteContext);
 
   if (favorites.length === 0) {
     return (
       <View style={styles.centerContainer}>
         <Ionicons name="heart-dislike-outline" size={60} color="#bdc3c7" />
-        <Text style={styles.emptyText}>Belum ada buku favorit</Text>
+        <Text style={styles.emptyText}>Belum ada buku favorit.</Text>
       </View>
     );
   }
@@ -37,7 +37,13 @@ const FavoriteScreen = ({ navigation }) => {
             <View style={styles.cardContent}>
               <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+            
+            <TouchableOpacity 
+              style={styles.deleteButton} 
+              onPress={() => toggleFavorite(item)}
+            >
+              <Ionicons name="trash-outline" size={22} color="#e74c3c" />
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
       />
@@ -56,9 +62,17 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 3
   },
   thumbnail: { width: 50, height: 75, borderRadius: 8, backgroundColor: '#e0e6ed' },
-  placeholderThumbnail: { width: 50, height: 75, borderRadius: 8, backgroundColor: '#f1f2f6', justifyContent: 'center', alignItems: 'center' },
+  placeholderThumbnail: { 
+    width: 50, height: 75, borderRadius: 8, backgroundColor: '#f1f2f6', 
+    justifyContent: 'center', alignItems: 'center' 
+  },
   cardContent: { flex: 1, paddingHorizontal: 15, justifyContent: 'center' },
-  bookTitle: { fontSize: 16, fontWeight: '700', color: '#2c3e50' }
+  bookTitle: { fontSize: 16, fontWeight: '700', color: '#2c3e50' },
+  deleteButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#fdecea', 
+  }
 });
 
 export default FavoriteScreen;

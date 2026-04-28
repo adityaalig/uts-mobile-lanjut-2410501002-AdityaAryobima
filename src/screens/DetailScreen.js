@@ -6,6 +6,7 @@ import { FavoriteContext } from '../context/FavoriteContext';
 const DetailScreen = ({ route }) => {
   const { bookId } = route.params;
   const [bookData, setBookData] = useState(null);
+  const [authorName, setAuthorName] = useState('Nama Penulis Tidak Diketahui'); 
   const [isLoading, setIsLoading] = useState(true);
 
   const { favorites, toggleFavorite } = useContext(FavoriteContext);
@@ -19,7 +20,19 @@ const DetailScreen = ({ route }) => {
         
         if (!response.ok) throw new Error(`Status: ${response.status}`);
         
-        setBookData(await response.json());
+        const data = await response.json();
+        setBookData(data);
+
+        if (data.authors && data.authors.length > 0) {
+           const authorKey = data.authors[0].author?.key;
+           if (authorKey) {
+               const authorRes = await fetch(`https://openlibrary.org${authorKey}.json`);
+               if (authorRes.ok) {
+                   const authorData = await authorRes.json();
+                   setAuthorName(authorData.name || authorData.personal_name || 'Nama Penulis Tidak Diketahui');
+               }
+           }
+        }
       } catch (error) {
         setBookData(null);
       } finally {
@@ -33,7 +46,7 @@ const DetailScreen = ({ route }) => {
   if (isLoading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#2e86de" />
+        <ActivityIndicator size="large" color="#967259" />
         <Text style={styles.loadingText}>Memuat detail buku...</Text>
       </View>
     );
@@ -50,6 +63,7 @@ const DetailScreen = ({ route }) => {
 
   const description = bookData.description?.value || bookData.description || 'Belum ada sinopsis untuk buku ini.';
   const coverUrl = bookData.covers?.[0] ? `https://covers.openlibrary.org/b/id/${bookData.covers[0]}-L.jpg` : null;
+  const publishYear = bookData.first_publish_date || bookData.created?.value?.substring(0, 4) || 'Tahun tidak tercatat'; 
 
   const handleToggleFavorite = () => {
     toggleFavorite({
@@ -76,7 +90,8 @@ const DetailScreen = ({ route }) => {
         <View style={styles.headerRow}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{bookData.title}</Text>
-            <Text style={styles.publishDate}>Tahun Terbit: {bookData.first_publish_date || 'Tidak diketahui'}</Text>
+            <Text style={styles.authorName}>{authorName}</Text>
+            <Text style={styles.publishDate}>Tahun Terbit: {publishYear}</Text>
           </View>
           <TouchableOpacity onPress={handleToggleFavorite}>
             <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={32} color={isFavorite ? "#e74c3c" : "#bdc3c7"} />
@@ -84,6 +99,7 @@ const DetailScreen = ({ route }) => {
         </View>
 
         <View style={styles.separator} />
+        
         <Text style={styles.sectionTitle}>Sinopsis</Text>
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
   centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f4f6f8' },
   loadingText: { marginTop: 12, color: '#7f8c8d', fontSize: 15 },
   errorText: { marginTop: 12, color: '#c0392b', fontSize: 16 },
-  coverWrapper: { width: '100%', height: 320, backgroundColor: '#e0e6ed', justifyContent: 'center', alignItems: 'center' },
+  coverWrapper: { width: '100%', height: 320, backgroundColor: '#e0e6ed', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 },
   coverImage: { width: '100%', height: '100%' },
   placeholderCover: { alignItems: 'center' },
   placeholderText: { marginTop: 8, color: '#95a5a6', fontWeight: '500' },
@@ -108,7 +124,8 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   titleContainer: { flex: 1, paddingRight: 15 },
   title: { fontSize: 22, fontWeight: 'bold', color: '#2c3e50', marginBottom: 6, lineHeight: 30 },
-  publishDate: { fontSize: 14, color: '#7f8c8d', fontWeight: '500' },
+  authorName: { fontSize: 16, color: '#967259', fontWeight: '600', marginBottom: 8 },
+  publishDate: { fontSize: 14, color: '#7f8c8d', fontWeight: '500', marginBottom: 4 },
   separator: { height: 1, backgroundColor: '#ecf0f1', marginVertical: 20 },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#34495e', marginBottom: 12 },
   descriptionText: { fontSize: 15, color: '#576574', lineHeight: 24, textAlign: 'justify' }

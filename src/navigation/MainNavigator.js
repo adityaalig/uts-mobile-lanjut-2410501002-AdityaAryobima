@@ -18,18 +18,18 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName = route.name === 'Home' ? 'home' : 
-                         route.name === 'Favorit' ? 'heart' : 
+                         route.name === 'Favorites' ? 'heart' : 
                          route.name === 'Search' ? 'search' : 'person';
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#2e86de',
+        tabBarActiveTintColor: '#967259',
         tabBarInactiveTintColor: '#a4b0be',
         tabBarStyle: { borderTopWidth: 0, elevation: 10, shadowOpacity: 0.1 },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Katalog Buku' }} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerTitle: 'Book Catalog', tabBarLabel: 'Home' }} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Favorit" component={FavoriteScreen} />
+      <Tab.Screen name="Favorites" component={FavoriteScreen} />
       <Tab.Screen name="About" component={AboutScreen} />
     </Tab.Navigator>
   );
