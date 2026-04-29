@@ -42,10 +42,10 @@ Berdasarkan `package.json`, aplikasi ini menggunakan:
 ![Error handling](./screenshots/errorhandling.jpeg) 
 
 # Link Video Demo
-https://drive.google.com/drive/folders/12OMrDG6TcPRFqhIfKhKe45Fn5F2d61f_ 
+https://drive.google.com/drive/folders/12OMrDG6TcPRFqhIfKhKe45Fn5F2d61f_
 
 # State Management
-Alasannya, saya ingin pembagian tugas dalam kode ini menjadi lebih jelas. di sini Context API saya gunakan sebagai “jembatan” agar data, seperti daftar favorit, bisa diakses di berbagai layar tanpa perlu dikirim secara manual. Sementara itu, useReducer saya gunakan sebagai pusat kendali logika aplikasinya. Dengan begitu, pada bagian tampilan hanya berfokus untuk menampilkan data dan mengirim perintah saja, seperti menambah atau menghapus favorit. Jadi hasilnya, kode akan lebih rapi, mudah dikembangkan, dan lebih sederhana dalam proses pemeliharaan.
+Untuk mengelola data di aplikasi ini, saya menggunakan kombinasi api context dan useReducer. Alasannya, saya ingin pembagian tugas dalam kode ini menjadi lebih jelas. di sini Context API saya gunakan sebagai “jembatan” agar data, seperti daftar favorit, bisa diakses di berbagai layar tanpa perlu dikirim secara manual. Sementara itu, useReducer saya gunakan sebagai pusat kendali logika aplikasinya. Dengan begitu, pada bagian tampilan hanya berfokus untuk menampilkan data dan mengirim perintah saja, seperti menambah atau menghapus favorit. Jadi hasilnya, kode akan lebih rapi, mudah dikembangkan, dan lebih sederhana dalam proses pemeliharaan.
 
 # Refleksi Pengerjaan
 Dalam proses pengerjaan aplikasi BookShelf ini, saya mendapatkan banyak pengalaman dalam menggunakan React Native dan Expo. Tapi, tentunya juga ada tantangannya. Tantangan utama saya ada pada integrasi API OpenLibrary karena struktur datanya itu tidak konsisten, sehingga saya perlu menggunakan teknik double fetching untuk menampilkan data penulis. Selain itu, saya sempat mengalami error pada foto profil di AboutScreen akibat kesalahan relative path dan cache Expo, yang membuat saya menjadi lebih teliti dalam mengelola aset. Saya juga belajar mengelola state dengan lebih baikmenggunakan Context API dan useReducer. 
