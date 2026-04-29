@@ -42,7 +42,9 @@ Berdasarkan `package.json`, aplikasi ini menggunakan:
 ![Error handling](./screenshots/errorhandling.jpeg) 
 
 # Link Video Demo
-https://drive.google.com/drive/folders/12OMrDG6TcPRFqhIfKhKe45Fn5F2d61f_ 
+https://drive.google.com/drive/folders/12OMrDG6TcPRFqhIfKhKe45Fn5F2d61f_
+
+//linknya disalin saja pak, kalau di klik disini dia not found 🙏🙏
 
 # State Management
 Untuk mengelola data di aplikasi ini, saya menggunakan kombinasi api context dan useReducer. Alasannya, saya ingin pembagian tugas dalam kode ini menjadi lebih jelas. di sini Context API saya gunakan sebagai “jembatan” agar data, seperti daftar favorit, bisa diakses di berbagai layar tanpa perlu dikirim secara manual. Sementara itu, useReducer saya gunakan sebagai pusat kendali logika aplikasinya. Dengan begitu, pada bagian tampilan hanya berfokus untuk menampilkan data dan mengirim perintah saja, seperti menambah atau menghapus favorit. Jadi hasilnya, kode akan lebih rapi, mudah dikembangkan, dan lebih sederhana dalam proses pemeliharaan.
